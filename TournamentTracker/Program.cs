@@ -29,11 +29,19 @@ namespace TournamentTracker
         static void Main(string[] args)
         {
             List<Team> teams = new List<Team>();
+            List<Match> matches = new List<Match>();
+
+            int numberTeams = 0;
             string input = "";
+
             while (input != "J")
             {
                 Console.WriteLine("A. Enter Teams");
-                Console.WriteLine("B. Match Teams");
+                Console.WriteLine("B. Enter Match Names");
+                Console.WriteLine("C. Match Teams Together");
+                Console.WriteLine("D. Enter Scores");
+                Console.WriteLine("E. Calculate Winner");
+                Console.WriteLine("F. Display Winner");
                 input = Console.ReadLine();
                 input = input.ToUpper();
                 input = ErrorChecking.EnsureEmptyLines(input);
@@ -45,16 +53,93 @@ namespace TournamentTracker
                     string sizeTeams = Console.ReadLine();
                     sizeTeams = ErrorChecking.EnsureDigit(sizeTeams);   // class ErrorChecking is from ErrorChecking.cs
                     sizeTeams = ErrorChecking.EnsureLength(sizeTeams);
-                    int numberTeams = Int32.Parse(sizeTeams);
+                    numberTeams = Int32.Parse(sizeTeams);
 
                     for (int i = 0; i < numberTeams; i++)
                     {
                         Console.WriteLine("Please add team name");
                         Console.Write($"{i + 1}: ");
                         string nameInput = Console.ReadLine();
+                        nameInput = nameInput.ToUpper();
 
                         teams.Add(new Team() { name = nameInput });
                     }
+                }else if (input == "B") //name team Match
+                {
+                    for (int i = 0; i < numberTeams/2; i++)
+                    {
+                        Console.WriteLine("Please add match name");
+                        Console.Write($"{i + 1}: ");
+                        string matchInput = Console.ReadLine();
+                        matchInput = matchInput.ToUpper();
+
+                        matches.Add(new Match() { name = matchInput });
+                    }
+
+                }else if (input == "C") // match teams together
+                {
+                    for (int i = 0; i < matches.Count; i++)
+                    {
+                        Match storageMatch = new Match();
+                        Console.WriteLine("Please enter name of match");
+                        string matchName = Console.ReadLine();
+                        matchName = matchName.ToUpper();
+                        storageMatch = FindName.Search(matchName, matches);
+
+                        Team storeTeamOne = new Team();
+                        Console.WriteLine("Please enter name of first team");
+                        string firstTeam = Console.ReadLine();
+                        firstTeam = firstTeam.ToUpper();
+                        storeTeamOne = FindName.Search(firstTeam, teams);
+
+                        Team storeTeamTwo = new Team();
+                        Console.WriteLine("Please enter name of second team");
+                        string secondTeam = Console.ReadLine();
+                        secondTeam = secondTeam.ToUpper();
+                        storeTeamTwo = FindName.Search(secondTeam, teams);
+
+                        storageMatch = Match.AssignMatch(storageMatch, storeTeamOne, storeTeamTwo);
+
+                        matches[i] = storageMatch;
+                    }
+
+                    
+                }else if (input == "D") // enter scores
+                {
+                    Match match = new Match();
+                    Console.WriteLine("Please enter name of team you wish to score ");
+                    string name = Console.ReadLine();
+                    name = name.ToUpper();
+                    match = FindName.SearchForTeamToEnterScore(name, matches);
+
+                    Console.WriteLine("Please enter their score");
+                    Console.WriteLine($"Name: {match.firstTeam.name}");
+                    int scoreIntOne = Int32.Parse(Console.ReadLine());
+                    match.firstTeam.score = scoreIntOne;
+
+                    Console.WriteLine($"Name: {match.secondTeam.name}");
+                    int scoreIntTwo = Int32.Parse(Console.ReadLine());
+                    match.secondTeam.score = scoreIntTwo;
+
+                    
+                }else if (input == "E") // calculate winner
+                {
+                    List<Team> result = new List<Team>();
+                    teams = Calculate.CalculationEngine(matches);
+                    
+                }
+                else if (input == "F") // display winner
+                {
+                    Console.WriteLine();
+                    for (int i = 0; i < teams.Count; i++)
+                    {
+                        Console.WriteLine(teams[i].name);
+                        Console.WriteLine(teams[i].score);
+                        Console.WriteLine();
+                    }
+                    
+                    
+                    
                 }
             }
         }

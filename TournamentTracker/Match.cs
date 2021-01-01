@@ -7,10 +7,48 @@ namespace TournamentTracker
     /// <summary>
     /// Describes a Match object, which is comprised of a match name and two competing teams
     /// </summary>
-    class Match
+    class Match // add location of match, date and time, description, etc.
     {
         public string name { get; set; }
         public Team firstTeam { get; set; }
         public Team secondTeam { get; set; }
+
+        public List<Team> ConvertMatchToTeam(Match match)
+        {
+            List<Team> teams = new List<Team>();
+            
+            teams.Add(match.firstTeam);
+            teams.Add(match.secondTeam);
+
+            return teams;
+        }
+        public static Match AssignMatch(Match match, Team inputOne, Team inputTwo)
+        {
+            match.firstTeam = inputOne;
+            match.secondTeam = inputTwo;
+
+            return match;
+        }
+
+        public List<Match> DetermineMatches(List<Team> teams)
+        {
+            List<Match> matches = new List<Match>();
+
+            for (int i = 0; i < matches.Count; i++)
+            {
+                //matches[i] = AssignMatch(firstTeam, secondTeam);
+            }
+            return matches;
+        }
+
+        public static void DisplayMatch(Match match)
+        {
+            Console.WriteLine($"Match Name: {match.name}");
+            Console.WriteLine($"Name {match.firstTeam.name}");
+            Console.WriteLine($"Score {match.firstTeam.score}");
+            Console.WriteLine();
+            Console.WriteLine($"Name {match.secondTeam.name}");
+            Console.WriteLine($"Score {match.secondTeam.score}");
+        }
     }
 }

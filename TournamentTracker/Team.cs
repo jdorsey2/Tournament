@@ -7,7 +7,7 @@ namespace TournamentTracker
     /// <summary>
     /// Describes a Team object, which contains a name and a score
     /// </summary>
-    class Team
+    class Team // add team members (size of team): with names, ages, etc.
     {
         public string name { get; set; }
         public int score { get; set; }
