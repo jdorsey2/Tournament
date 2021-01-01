@@ -187,7 +187,7 @@ namespace TournamentTracker
                     int scoreIntTwo = Int32.Parse(Console.ReadLine());
                     match.secondTeam.score = scoreIntTwo;
 
-                    
+                    // test
                 }else if (input == "F") // calculate winner
                 {
                     if (counter > 0)
