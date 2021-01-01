@@ -38,29 +38,7 @@ namespace TournamentTracker
             }
             return input;
         }
-        /// <summary>
-        /// Ensures input is even only, any non-even input will re-prompt for input.
-        /// </summary>
-        /// <param name="input">Only accepts integers</param>
-        /// <returns>the input which is verified as containing only even integers.</returns>
-        public static int EnsureEven(int input)
-        {
-            bool keepGoing = true;
-
-            while (keepGoing)
-            {
-                keepGoing = false;
-                if (input % 2 != 0)
-                {
-                    Console.WriteLine("Please enter an even number only");
-                    string inputString = Console.ReadLine();
-                    inputString = EnsureDigit(inputString);
-                    input = Int32.Parse(inputString);
-                    keepGoing = true;
-                }
-            }
-            return input;
-        }
+        
         /// <summary>
         /// Ensures blank input is not accepted, will prompt for input if input is blank
         /// </summary>
@@ -74,7 +52,7 @@ namespace TournamentTracker
             {
                 keepGoing = false;
 
-                if (input == "" || input == " " || input == "  ")
+                if (input == null || input == "" || input == " " || input == "  ")
                 {
                     keepGoing = true;
                     Console.WriteLine("Please enter a value, try again");

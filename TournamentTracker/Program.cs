@@ -41,6 +41,8 @@ namespace TournamentTracker
             {
                 Console.WriteLine();
                 Console.WriteLine("Welcome to Tournament Tracker");
+                Console.WriteLine("Please select one of the following");
+                Console.WriteLine("---------------------------------------------------------------------");
                 Console.WriteLine("A. Enter Teams");
                 Console.WriteLine("B. Enter Match Names");
                 Console.WriteLine("C. Match Teams Together");
@@ -49,8 +51,9 @@ namespace TournamentTracker
                 Console.WriteLine("F. Calculate Winner");
                 Console.WriteLine("G. Display Winner");
                 Console.WriteLine("H. Next Round");
+                Console.WriteLine("I. Help Tutorial");
+                Console.WriteLine("---------------------------------------------------------------------");
                 Console.WriteLine($"You have {counter} rounds left of {numberRounds} total rounds");
-                
                 Console.WriteLine();
 
                 input = Console.ReadLine();
@@ -62,9 +65,17 @@ namespace TournamentTracker
                 {
                     Console.WriteLine("How many teams do you want?");
                     string sizeTeams = Console.ReadLine();
+                    sizeTeams = ErrorChecking.EnsureEmptyLines(sizeTeams);
                     sizeTeams = ErrorChecking.EnsureDigit(sizeTeams);   // class ErrorChecking is from ErrorChecking.cs
                     sizeTeams = ErrorChecking.EnsureLength(sizeTeams);
-                    numberTeams = Int32.Parse(sizeTeams);
+                    try
+                    {
+                        numberTeams = Int32.Parse(sizeTeams);
+                    }
+                    catch (FormatException)
+                    {
+                        Console.WriteLine("Please enter a digit only");
+                    }
 
                     originalNumber = numberTeams;
                     int leftOutAmount = 0;
@@ -72,7 +83,7 @@ namespace TournamentTracker
                     bool cannotCompete = false;
 
                     // ************ Calculates number of tournament rounds based on how many teams is entered ****************
-
+                    // need to fix for full functionality: line 97 needs fixing
                     while (numberTeams > 1)
                     {
                         int numberOneLess = numberTeams - 1;
@@ -112,18 +123,19 @@ namespace TournamentTracker
 
                     numberRounds = counter;
 
-
-
+                    // add a team name to teams (List<Team>)
                     for (int i = 0; i < originalNumber; i++)
                     {
                         Console.WriteLine("Please add team name");
                         Console.Write($"{i + 1}: ");
                         string nameInput = Console.ReadLine();
                         nameInput = nameInput.ToUpper();
+                        nameInput = ErrorChecking.EnsureEmptyLines(nameInput);
+                        nameInput = ErrorChecking.EnsureLength(nameInput);
 
                         teams.Add(new Team() { name = nameInput });
                     }
-                }else if (input == "B") //name team Match
+                }else if (input == "B") //name team Match: add name to List<Match>
                 {
                     for (int i = 0; i < originalNumber/2; i++)
                     {
@@ -131,30 +143,38 @@ namespace TournamentTracker
                         Console.Write($"{i + 1}: ");
                         string matchInput = Console.ReadLine();
                         matchInput = matchInput.ToUpper();
+                        matchInput = ErrorChecking.EnsureEmptyLines(matchInput);
+                        matchInput = ErrorChecking.EnsureLength(matchInput);
 
                         matches.Add(new Match() { name = matchInput });
                     }
 
                 }else if (input == "C") // match teams together
                 {
-                    for (int i = 0; i < matches.Count; i++)
+                    for (int i = 0; i < matches.Count; i++) // reorganize teams into matches put into List<Match>
                     {
                         Match storageMatch = new Match();
                         Console.WriteLine("Please enter name of match");
                         string matchName = Console.ReadLine();
                         matchName = matchName.ToUpper();
+                        matchName = ErrorChecking.EnsureEmptyLines(matchName);
+                        matchName = ErrorChecking.EnsureLength(matchName);
                         storageMatch = FindName.Search(matchName, matches);
 
                         Team storeTeamOne = new Team();
                         Console.WriteLine("Please enter name of first team");
                         string firstTeam = Console.ReadLine();
                         firstTeam = firstTeam.ToUpper();
+                        firstTeam = ErrorChecking.EnsureEmptyLines(firstTeam);
+                        firstTeam = ErrorChecking.EnsureLength(firstTeam);
                         storeTeamOne = FindName.Search(firstTeam, teams);
 
                         Team storeTeamTwo = new Team();
                         Console.WriteLine("Please enter name of second team");
                         string secondTeam = Console.ReadLine();
                         secondTeam = secondTeam.ToUpper();
+                        secondTeam = ErrorChecking.EnsureEmptyLines(secondTeam);
+                        secondTeam = ErrorChecking.EnsureLength(secondTeam);
                         storeTeamTwo = FindName.Search(secondTeam, teams);
 
                         storageMatch = Match.AssignMatch(storageMatch, storeTeamOne, storeTeamTwo);
@@ -176,18 +196,44 @@ namespace TournamentTracker
                     Console.WriteLine("Please enter name of team you wish to score ");
                     string name = Console.ReadLine();
                     name = name.ToUpper();
+                    name = ErrorChecking.EnsureEmptyLines(name);
+                    name = ErrorChecking.EnsureLength(name);
                     match = FindName.SearchForTeamToEnterScore(name, matches);
 
                     Console.WriteLine("Please enter their score");
                     Console.WriteLine($"Name: {match.firstTeam.name}");
-                    int scoreIntOne = Int32.Parse(Console.ReadLine());
+                    string scoreOne = Console.ReadLine();
+                    scoreOne = ErrorChecking.EnsureEmptyLines(scoreOne);
+                    scoreOne = ErrorChecking.EnsureDigit(scoreOne);
+                    scoreOne = ErrorChecking.EnsureLength(scoreOne);
+                    int scoreIntOne = 0;
+                    try
+                    {
+                        scoreIntOne = Int32.Parse(scoreOne);
+                    }
+                    catch (FormatException)
+                    {
+                        Console.WriteLine("Please enter a digit only");
+                    }
                     match.firstTeam.score = scoreIntOne;
 
                     Console.WriteLine($"Name: {match.secondTeam.name}");
-                    int scoreIntTwo = Int32.Parse(Console.ReadLine());
+                    string scoreTwo = Console.ReadLine();
+                    scoreTwo = ErrorChecking.EnsureEmptyLines(scoreTwo);
+                    scoreTwo = ErrorChecking.EnsureDigit(scoreTwo);
+                    scoreTwo = ErrorChecking.EnsureLength(scoreTwo);
+                    int scoreIntTwo = 0;
+                    try
+                    {
+                        scoreIntTwo = Int32.Parse(scoreTwo);
+                    }
+                    catch (FormatException)
+                    {
+                        Console.WriteLine("Please enter only a digit");
+                    }
                     match.secondTeam.score = scoreIntTwo;
 
-                    // test
+                    
                 }else if (input == "F") // calculate winner
                 {
                     if (counter > 0)
@@ -197,8 +243,6 @@ namespace TournamentTracker
                         Console.WriteLine("Winners have been determined");
                         matches.Clear();
                         originalNumber = teams.Count;
-
-                       // originalNumber--;
                         counter--;
                     }
                     else
@@ -237,6 +281,12 @@ namespace TournamentTracker
                         Console.WriteLine();
                     }
 
+                }else if (input == "I") // tutorial
+                {
+
+                }else
+                {
+                    Console.WriteLine("Please enter one of the options provided");
                 }
             }
         }

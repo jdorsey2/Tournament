@@ -13,15 +13,6 @@ namespace TournamentTracker
         public Team firstTeam { get; set; }
         public Team secondTeam { get; set; }
 
-        public List<Team> ConvertMatchToTeam(Match match)
-        {
-            List<Team> teams = new List<Team>();
-            
-            teams.Add(match.firstTeam);
-            teams.Add(match.secondTeam);
-
-            return teams;
-        }
         public static Match AssignMatch(Match match, Team inputOne, Team inputTwo)
         {
             match.firstTeam = inputOne;
@@ -29,8 +20,6 @@ namespace TournamentTracker
 
             return match;
         }
-
-        
 
         public static void DisplayMatch(Match match)
         {

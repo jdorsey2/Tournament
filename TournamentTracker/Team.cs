@@ -5,7 +5,7 @@ using System.Text;
 namespace TournamentTracker
 {
     /// <summary>
-    /// Describes a Team object, which contains a name and a score
+    /// Describes a Team object, which contains a name and a score and contains one method to delete a score.
     /// </summary>
     class Team // add team members (size of team): with names, ages, etc.
     {
