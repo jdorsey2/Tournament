@@ -11,5 +11,11 @@ namespace TournamentTracker
     {
         public string name { get; set; }
         public int score { get; set; }
+
+        public Team DeleteScore(Team team)
+        {
+            team.score = 0;
+            return team;
+        }
     }
 }

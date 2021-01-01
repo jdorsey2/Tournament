@@ -30,18 +30,29 @@ namespace TournamentTracker
         {
             List<Team> teams = new List<Team>();
             List<Match> matches = new List<Match>();
-
+            int originalNumber = 0;
+            int numberRounds = 0;
+            int counter = 0;
             int numberTeams = 0;
+
             string input = "";
 
             while (input != "J")
             {
+                Console.WriteLine();
+                Console.WriteLine("Welcome to Tournament Tracker");
                 Console.WriteLine("A. Enter Teams");
                 Console.WriteLine("B. Enter Match Names");
                 Console.WriteLine("C. Match Teams Together");
-                Console.WriteLine("D. Enter Scores");
-                Console.WriteLine("E. Calculate Winner");
-                Console.WriteLine("F. Display Winner");
+                Console.WriteLine("D. Display Matches");
+                Console.WriteLine("E. Enter Scores");
+                Console.WriteLine("F. Calculate Winner");
+                Console.WriteLine("G. Display Winner");
+                Console.WriteLine("H. Next Round");
+                Console.WriteLine($"You have {counter} rounds left of {numberRounds} total rounds");
+                
+                Console.WriteLine();
+
                 input = Console.ReadLine();
                 input = input.ToUpper();
                 input = ErrorChecking.EnsureEmptyLines(input);
@@ -55,7 +66,55 @@ namespace TournamentTracker
                     sizeTeams = ErrorChecking.EnsureLength(sizeTeams);
                     numberTeams = Int32.Parse(sizeTeams);
 
-                    for (int i = 0; i < numberTeams; i++)
+                    originalNumber = numberTeams;
+                    int leftOutAmount = 0;
+                    
+                    bool cannotCompete = false;
+
+                    // ************ Calculates number of tournament rounds based on how many teams is entered ****************
+
+                    while (numberTeams > 1)
+                    {
+                        int numberOneLess = numberTeams - 1;
+
+                        if (numberTeams % 2 == 0)
+                        {
+                            numberTeams = numberTeams / 2;
+                            counter++;
+                        }
+                        else if ((numberOneLess) % 2 == 0)
+                        {
+                            numberOneLess = numberOneLess / 2;
+                            counter++;
+                            leftOutAmount++;
+                            cannotCompete = true;       // if there is one team left over because odd number of teams: so cannot com
+                            numberTeams = numberOneLess;
+                        }
+                    }
+                    if (leftOutAmount % 2 == 0) // add it to the counter amount
+                    {
+                        counter = counter + leftOutAmount; // this leads to wrong solutions
+                        leftOutAmount = 0;
+                        cannotCompete = false;
+
+                    }
+                    else if (leftOutAmount > 2) // set odd number 3 or greater to add matching teams to counter with one being left over
+                    {
+                        leftOutAmount = leftOutAmount - 1;
+                    }
+                    if (cannotCompete == true)
+                    {
+                        Console.WriteLine($"you entered {originalNumber} teams, in the course of the game play, you will have {leftOutAmount} team(s) left out,");
+                        Console.WriteLine("at least one team will have to play an extra time to account for this");
+                    }
+                    Console.WriteLine();
+                    Console.WriteLine($"you have: {counter} rounds left");
+
+                    numberRounds = counter;
+
+
+
+                    for (int i = 0; i < originalNumber; i++)
                     {
                         Console.WriteLine("Please add team name");
                         Console.Write($"{i + 1}: ");
@@ -66,7 +125,7 @@ namespace TournamentTracker
                     }
                 }else if (input == "B") //name team Match
                 {
-                    for (int i = 0; i < numberTeams/2; i++)
+                    for (int i = 0; i < originalNumber/2; i++)
                     {
                         Console.WriteLine("Please add match name");
                         Console.Write($"{i + 1}: ");
@@ -104,7 +163,14 @@ namespace TournamentTracker
                     }
 
                     
-                }else if (input == "D") // enter scores
+                }else if (input == "D") // display matches
+                {
+                    for (int i = 0; i < matches.Count; i++)
+                    {
+                        Match.DisplayMatch(matches[i]);
+                    }
+                }
+                else if (input == "E") // enter scores
                 {
                     Match match = new Match();
                     Console.WriteLine("Please enter name of team you wish to score ");
@@ -122,14 +188,28 @@ namespace TournamentTracker
                     match.secondTeam.score = scoreIntTwo;
 
                     
-                }else if (input == "E") // calculate winner
+                }else if (input == "F") // calculate winner
                 {
-                    List<Team> result = new List<Team>();
-                    teams = Calculate.CalculationEngine(matches);
+                    if (counter > 0)
+                    {
+                        List<Team> result = new List<Team>();
+                        teams = Calculate.CalculationEngine(matches);
+                        Console.WriteLine("Winners have been determined");
+                        matches.Clear();
+                        originalNumber = teams.Count;
+
+                       // originalNumber--;
+                        counter--;
+                    }
+                    else
+                    {
+                        Console.WriteLine("you have zero rounds left to play");
+                    }
                     
                 }
-                else if (input == "F") // display winner
+                else if (input == "G") // display winner
                 {
+                    Console.WriteLine("Winners are: ");
                     Console.WriteLine();
                     for (int i = 0; i < teams.Count; i++)
                     {
@@ -138,8 +218,25 @@ namespace TournamentTracker
                         Console.WriteLine();
                     }
                     
-                    
-                    
+                }else if (input == "H") // next round
+                {
+                    if (counter == 0)
+                    {
+                        Console.WriteLine("You have zero rounds left, please restart program");
+                        Console.WriteLine();
+                    }
+
+                    for (int i = 0; i < teams.Count; i++)
+                    {
+                        teams[i].DeleteScore(teams[i]);
+                    }
+                    Console.WriteLine("Here are the available teams for the next round, please match them");
+                    for (int i = 0; i < teams.Count; i++)
+                    {
+                        Console.WriteLine(teams[i].name);
+                        Console.WriteLine();
+                    }
+
                 }
             }
         }

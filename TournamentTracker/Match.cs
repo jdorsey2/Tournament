@@ -30,25 +30,17 @@ namespace TournamentTracker
             return match;
         }
 
-        public List<Match> DetermineMatches(List<Team> teams)
-        {
-            List<Match> matches = new List<Match>();
-
-            for (int i = 0; i < matches.Count; i++)
-            {
-                //matches[i] = AssignMatch(firstTeam, secondTeam);
-            }
-            return matches;
-        }
+        
 
         public static void DisplayMatch(Match match)
         {
             Console.WriteLine($"Match Name: {match.name}");
             Console.WriteLine($"Name {match.firstTeam.name}");
             Console.WriteLine($"Score {match.firstTeam.score}");
-            Console.WriteLine();
+            Console.WriteLine("and");
             Console.WriteLine($"Name {match.secondTeam.name}");
             Console.WriteLine($"Score {match.secondTeam.score}");
+            Console.WriteLine("----------------------------------------");
         }
     }
 }
