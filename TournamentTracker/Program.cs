@@ -93,38 +93,59 @@ namespace TournamentTracker
                             numberTeams = numberTeams / 2;
                             counter++;
                         }
+
                         else if ((numberOneLess) % 2 == 0)
                         {
-                            numberOneLess = numberOneLess / 2;
-                            counter++;
-                            leftOutAmount++;
-                            cannotCompete = true;       // if there is one team left over because odd number of teams: so cannot com
-                            numberTeams = numberOneLess;
+                            numberTeams++;  // add an elimination round
+                            leftOutAmount++; 
                         }
                     }
-                    if (leftOutAmount % 2 == 0) // add it to the counter amount
+                    if (leftOutAmount == 1)
                     {
-                        counter = counter + leftOutAmount; // this leads to wrong solutions
-                        leftOutAmount = 0;
-                        cannotCompete = false;
+                        cannotCompete = true;
+                    }
+                    if (leftOutAmount % 2 == 0 && leftOutAmount != 0)
+                    {
+                        Console.WriteLine($"The number of teams left out is: {leftOutAmount}");
+                        Console.WriteLine("These teams that are left out can play each other");
+                        Console.WriteLine("Please increase the number of rounds if necessary");
+
+                        if (leftOutAmount == 2)
+                        {
+                            Console.WriteLine("Please add one extra round to the total");
+                        }
+                        
+                        const int leftOutVar = 2;
+                        int result = 1;
+
+                        for (int i = 0; i < 1000; i++)
+                        {
+                            if (2 * (leftOutVar + i) == leftOutAmount)
+                            {
+                                result = result + i;
+                                result++;
+                                Console.WriteLine($"Please add {result} number of rounds to the total rounds played");
+                            }
+                        }
 
                     }
-                    else if (leftOutAmount > 2) // set odd number 3 or greater to add matching teams to counter with one being left over
+                    if (leftOutAmount % 2 != 0 && leftOutAmount > 2)
                     {
-                        leftOutAmount = leftOutAmount - 1;
+                        int numberPlayEachOther = leftOutAmount - 1;
+                        cannotCompete = true;
+                        Console.WriteLine($"{numberPlayEachOther} teams can play each other with an extra round and one team can play an elimination round or another alternative can be sought");
                     }
                     if (cannotCompete == true)
                     {
                         Console.WriteLine($"you entered {originalNumber} teams, in the course of the game play, you will have {leftOutAmount} team(s) left out,");
-                        Console.WriteLine("at least one team will have to play an extra time to account for this");
+                        Console.WriteLine("Please add the appropriate number of elimination rounds to the total number of rounds, because at least one team will have to play an extra time to account for this");
                     }
                     Console.WriteLine();
                     Console.WriteLine($"you have: {counter} rounds left");
 
                     numberRounds = counter;
-
-                    // add a team name to teams (List<Team>)
-                    for (int i = 0; i < originalNumber; i++)
+                    
+                    for (int i = 0; i < originalNumber; i++) // add a team name to teams (List<Team>)
                     {
                         Console.WriteLine("Please add team name");
                         Console.Write($"{i + 1}: ");
@@ -266,7 +287,7 @@ namespace TournamentTracker
                 {
                     if (counter == 0)
                     {
-                        Console.WriteLine("You have zero rounds left, please restart program");
+                        Console.WriteLine("You have zero rounds left, please restart the program");
                         Console.WriteLine();
                     }
 

@@ -5,8 +5,8 @@ using System.Text;
 namespace TournamentTracker
 {
     /// <summary>
-    /// Includes error checking methods, used to verify strings and integers. List: EnsureDigit, 
-    /// EnsureEven, EnsureEmptyLines, EnsureLength.
+    /// Includes error checking methods, used to verify strings and integers. Including: EnsureDigit, 
+    /// EnsureEmptyLines, EnsureLength.
     /// </summary>
     class ErrorChecking
     {

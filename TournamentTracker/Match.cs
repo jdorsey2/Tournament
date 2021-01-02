@@ -13,6 +13,13 @@ namespace TournamentTracker
         public Team firstTeam { get; set; }
         public Team secondTeam { get; set; }
 
+        /// <summary>
+        /// Reorganizes two objects of type Team as a Match object. Purely reclassifying an object in terms of another class. 
+        /// </summary>
+        /// <param name="match">Takes a Match object as not to overwrite any data</param>
+        /// <param name="inputOne">Takes a Team object as one input</param>
+        /// <param name="inputTwo">Takes a Team object as one input</param>
+        /// <returns>A object of type Match</returns>
         public static Match AssignMatch(Match match, Team inputOne, Team inputTwo)
         {
             match.firstTeam = inputOne;
@@ -21,6 +28,10 @@ namespace TournamentTracker
             return match;
         }
 
+        /// <summary>
+        /// Displays the elments of a Match object
+        /// </summary>
+        /// <param name="match">Ensure that the input Match object is not null</param>
         public static void DisplayMatch(Match match)
         {
             Console.WriteLine($"Match Name: {match.name}");
