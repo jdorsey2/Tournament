@@ -12,6 +12,7 @@ namespace TournamentTracker
     {
         /// <summary>
         /// Ensures the string is a digit and not a letter or punctuation. If a non-digit is found, will prompt for new input.
+        /// Ensure it is nine or less digits long
         /// </summary>
         /// <param name="input">takes any string as input</param>
         /// <returns>the input string that is verified to only contain a digit</returns>
@@ -22,17 +23,21 @@ namespace TournamentTracker
             while (keepGoing)
             {
                 keepGoing = false;
-
+                
                 foreach (char letter in input)
                 {
                     if (char.IsPunctuation(letter) || char.IsLetter(letter))
                     {
                         keepGoing = true;
                     }
+                    if (input.Length > 9)
+                    {
+                        keepGoing = true;
+                    }
                 }
                 if (keepGoing == true)
                 {
-                    Console.WriteLine("Please enter a digit only");
+                    Console.WriteLine("Please try again and enter a digit only or a shorter number");
                     input = Console.ReadLine();
                 }
             }
